@@ -16,15 +16,21 @@ fs.exists('./.env', (exists) => {
 });
 
 importFns.getRepoContributors(owner, repo, function (err, result) {
+  // FIXME: it is not very clear what the result variable holds.
+  // Please rename it to something more expressive.
   if (err) {
     throw err;
   }
 
   function addAvatarFiles(directoryName) {
     result.forEach(function(cv, index) {
+    // FIXME: it is not very clear what the cv variable holds.
+    // Please rename it to something more expressive.
       importFns.downloadImageByURL(cv.avatar_url, directoryName + '/' + cv.id + '.jpg');
     });
   }
+
+  // THUMBSUP: Nice error handling. Very helpful messages.
 
   //checks to make sure the owner and repo exist
   if (result.message === "Not Found"){
@@ -38,7 +44,7 @@ importFns.getRepoContributors(owner, repo, function (err, result) {
     return;
   }
 
-  var avatarDirectory = './avatars';
+  var avatarDirectory = './avatars'; // FIXME: Consider making this a constant.
   //check to see if path avatars exists
   fs.exists(avatarDirectory, (exists) => {
     if (exists) {
@@ -47,6 +53,12 @@ importFns.getRepoContributors(owner, repo, function (err, result) {
       fs.mkdirSync(avatarDirectory);
       addAvatarFiles(avatarDirectory);
     }
+    // The code above is great. Just a suggestion...
+    // You could also write it like this:
+    if (!exists) {
+      fs.mkdirSync(avatarDirectory);
+    }
+    addAvatarFiles(avatarDirectory);
   });
 });
 
